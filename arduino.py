@@ -1,7 +1,7 @@
 import pyfirmata2
 
 # The Arduino IDE must be running in the background with the "Standard Firmata"
-# (File\Examples\Firmata\Standard Firmata) script uploaded
+# (File -> Examples -> Firmata -> Standard Firmata) sketch uploaded
 
 # Initialize the Arduino UNO
 try:
