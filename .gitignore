@@ -14,3 +14,6 @@ __pycache__/
 # Ignore logs and temporary files
 *.log
 *.tmp
+
+# Ignore Arduino CLI files installed locally
+Arduino CLI/

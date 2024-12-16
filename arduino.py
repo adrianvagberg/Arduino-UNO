@@ -1,16 +1,12 @@
 import pyfirmata2
+import upload_firmata
 
-# The Arduino IDE must be running in the background with the "Standard Firmata"
-# (File -> Examples -> Firmata -> Standard Firmata) sketch uploaded
+# Upload the Standard Firmata sketch to the Arduino
+# (necessary for controlling it from Python)
+PORT = upload_firmata.run()
 
-# Initialize the Arduino UNO
-try:
-    PORT = pyfirmata2.Arduino.AUTODETECT
-except:
-    # If the port is not autodetected, find it in the Arduino IDE (usually it is COM3, COM4 or COM5 on PC)
-    PORT = 'COM5'
-finally:
-    board = pyfirmata2.Arduino(PORT)
+# Initialize the Arduino in pyFirmata
+board = pyfirmata2.Arduino(f'{PORT}')
 
 # Assign the 2nd pin as digital output
 digitalOut = board.get_pin('d:2:o')
