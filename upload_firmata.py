@@ -40,6 +40,21 @@ def install_arduino_cli():
 
     print("Arduino CLI installed successfully.")
 
+# Function to check and install Arduino AVR core
+def install_arduino_avr_core():
+    print("Checking if Arduino AVR core is installed...")
+    result = subprocess.run(["arduino-cli", "core", "list"], capture_output=True, text=True)
+
+    # Check if "arduino:avr" is in the installed core list
+    if "arduino:avr" not in result.stdout:
+        print("Arduino AVR core not found. Installing...")
+        result = subprocess.run(["arduino-cli", "core", "install", "arduino:avr"], capture_output=True, text=True)
+        check_error(result, "Failed to install Arduino AVR core.")
+        print("Arduino AVR core installed successfully.")
+    else:
+        print("Arduino AVR core is already installed.")
+
+
 
 # Function to install a library using Arduino CLI
 def install_library(library_name):
@@ -84,6 +99,9 @@ def run():
     if arduino_cli_path not in os.environ["PATH"]:
         os.environ["PATH"] = f"{os.environ['PATH']};{install_dir}"
 
+    # Ensure Arduino AVR core is installed
+    install_arduino_avr_core()
+
     # Install necessary libraries (Firmata and Servo)
     install_library("Firmata")
     install_library("Servo")
@@ -93,12 +111,12 @@ def run():
 
     # Compile the sketch
     print("Compiling StandardFirmata...")
-    result = subprocess.run(["arduino-cli", "compile", "--fqbn", board_type, sketch_path], capture_output=True)
+    result = subprocess.run([arduino_cli_path, "compile", "--fqbn", board_type, sketch_path], capture_output=True)
     check_error(result, "Failed to compile StandardFirmata.")
 
     # Upload the sketch to the Arduino
     print(f"Uploading StandardFirmata to Arduino on port {port}...")
-    result = subprocess.run(["arduino-cli", "upload", "--fqbn", board_type, "--port", port, sketch_path],
+    result = subprocess.run([arduino_cli_path, "upload", "--fqbn", board_type, "--port", port, sketch_path],
                             capture_output=True)
     check_error(result, "Failed to upload StandardFirmata to the board.")
 
